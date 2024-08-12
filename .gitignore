@@ -1,1 +1,3 @@
 .eventif
+*.sqlite3
+__pycache__
