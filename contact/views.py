@@ -21,8 +21,8 @@ def create(request):
     _send_mail('contact/contact_email.txt', 
                form.cleaned_data, 
                'Confirmação de contato!', 
-               settings.DEFAULT_FROM_EMAIL, 
-               form.cleaned_data['email'])
+               form.cleaned_data['email'],
+               settings.DEFAULT_FROM_EMAIL)
     
     messages.success(request, 'Contato enviado')
     return HttpResponseRedirect('/contato/')
@@ -32,4 +32,4 @@ def new(request):
 
 def _send_mail(template_name, context, subject, from_, to):
     body = render_to_string(template_name, context)
-    email = mail.send_mail(subject, body, from_, [from_, to])
+    email = mail.send_mail(subject, body, from_, [to, from_])
