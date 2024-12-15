@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.core import mail
+from datetime import datetime
 from contact.forms import ContactForm
+from contact.models import Contact
 
 class ContactTestForm(TestCase):
     def setUp(self):
@@ -100,3 +102,29 @@ class SuccessContactMessage(TestCase):
         data = dict(name="Erik Miluk Pinheiro", email="erikmiluk@gmail.com", phone="53-91234-5678", message="Necessito entrar em contato sobre uma dúvida no evento")
         resp = self.client.post('/contato/', data, follow=True)
         self.assertContains(resp, 'Contato enviado')
+
+class ContactModelTest(TestCase):
+    def setUp(self):
+        self.obj = Contact(
+            name = 'Erik Pinheiro',
+            email = 'erikmiluk@gmail.com',
+            phone = '53-123435-6789',
+            message = 'Necessito tirar uma dúvida sobre o evento'        
+        )
+        self.obj.save()
+
+    def test_create(self):
+        self.assertTrue(Contact.objects.exists())
+
+    def test_created_at(self):
+        self.assertIsInstance(self.obj.created_at, datetime)
+
+    def test_str(self):
+        self.assertEqual('Erik Pinheiro', str(self.obj))
+
+    def test_flag_default_False(self):
+        self.assertEqual(False, self.obj.flag)
+
+    def test_phone_can_be_blank(self):
+        field = self.obj._meta.get_field('phone')
+        self.assertTrue(field.blank)

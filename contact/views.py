@@ -5,6 +5,7 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.conf import settings
 from contact.forms import ContactForm
+from contact.models import Contact
 
 def newContact(request):
     if request.method == 'POST':
@@ -17,6 +18,8 @@ def create(request):
 
     if not form.is_valid():
          return render(request, 'contact/contact_form.html', {'form': form})
+
+    contact = Contact.objects.create(**form.cleaned_data)
 
     _send_mail('contact/contact_email.txt', 
                form.cleaned_data, 
