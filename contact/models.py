@@ -1,4 +1,8 @@
 from django.db import models
+from django.core import mail
+from django.utils.timezone import now
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 class Contact(models.Model):
     name = models.CharField('nome', max_length=100)
@@ -17,3 +21,20 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.name
+
+@receiver(pre_save, sender=Contact)
+def my_handler(sender, instance, **kwargs):
+    if instance.response != "":
+        _send_mail('contact/contact_response.txt', 
+            vars(instance), 
+            'Confirmação de resposta!', 
+            instance.email,
+            settings.DEFAULT_FROM_EMAIL)
+        responsed_at = now()
+        flag = True
+
+
+
+def _send_mail(template_name, context, subject, from_, to):
+    body = render_to_string(template_name, context)
+    email = mail.send_mail(subject, body, from_, [from_, to])
