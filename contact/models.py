@@ -12,7 +12,7 @@ class Contact(models.Model):
     phone = models.CharField('telefone', max_length=20, blank=True)
     message = models.CharField('mensagem', max_length=100)
     created_at = models.DateTimeField('enviado em', auto_now_add=True)
-    response = models.CharField('response', max_length=20)
+    response = models.CharField('response', max_length=20, blank=True)
     responsed_at = models.DateTimeField('respondido em', null=True, blank=True)
     flag = models.BooleanField('respondido', default=False)
 
