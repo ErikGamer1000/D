@@ -101,7 +101,7 @@ class SuccessContactMessage(TestCase):
     def test_success_message(self):
         data = dict(name="Erik Miluk Pinheiro", email="erikmiluk@gmail.com", phone="53-91234-5678", message="Necessito entrar em contato sobre uma dúvida no evento")
         resp = self.client.post('/contato/', data, follow=True)
-        self.assertContains(resp, 'Contato enviado')
+        self.assertContains(resp, 'Contato enviado.')
 
 class ContactModelTest(TestCase):
     def setUp(self):
